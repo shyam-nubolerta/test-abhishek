@@ -1,0 +1,117 @@
+package com.nubolerta.tech.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nubolerta.tech.constants.SystemConstants;
+import com.nubolerta.tech.dto.UserField;
+import com.nubolerta.tech.dto.UserFieldValue;
+import com.nubolerta.tech.entities.GatewayUser;
+import com.nubolerta.tech.entities.SystemField;
+import com.nubolerta.tech.entities.SystemUserFieldValue;
+import com.nubolerta.tech.external.DynamicFeignClient;
+import com.nubolerta.tech.repository.GatewayUserRepository;
+import com.nubolerta.tech.repository.SystemFieldRepository;
+import com.nubolerta.tech.repository.SystemRepository;
+import com.nubolerta.tech.repository.SystemUserFieldValueRepository;
+
+import feign.Feign;
+import jakarta.persistence.Column;
+import jakarta.transaction.Transactional;
+
+@Service
+public class SystemFieldService {
+
+  @Autowired
+  private SystemFieldRepository systemFieldRepository;
+  
+  @Autowired
+  private SystemRepository systemRepository;
+
+  @Autowired
+  private ColumnMetadataService columnMetadataService;
+
+  @Autowired
+  private GatewayUserRepository gatewayUserRepository;
+
+  @Autowired
+  private SystemUserFieldValueRepository systemUserFieldValueRepository;
+
+  Random random = new Random();
+
+  public List<SystemField> getAllSystemFieldBySystemName(String systemName) {
+    return systemFieldRepository.findSystemFieldsBySystemName(systemName);
+  }
+
+  @Transactional
+  public void saveUserFields(List<UserFieldValue> userFieldValues, String system) throws Exception {
+    List<UserFieldValue> userFieldValueToPersist = fetchUserFieldValueToPersist(userFieldValues);
+    GatewayUser gatewayUser = populateGatewayUser(userFieldValueToPersist);
+    gatewayUserRepository.save(gatewayUser);
+    List<SystemUserFieldValue> systemUserFieldValues = fetchSystemUserFieldValues(userFieldValues, system, gatewayUser);
+    systemUserFieldValueRepository.saveAll(systemUserFieldValues);
+    // Make External service call by fetching url from DB, uncomment when real service url is available.
+    //makePostRequest(userFieldValues, system);
+  }
+
+  public Object makePostRequest(List<UserFieldValue> userFieldValues, String system) {
+        // Fetch the dynamic URL from the database
+        com.nubolerta.tech.entities.System systemDB = systemRepository.findByName(system);
+
+        String dynamicUrl = systemDB.getUrl();
+
+        // Build a Feign client with the dynamic URL
+        DynamicFeignClient dynamicFeignClient = Feign.builder()
+                .target(DynamicFeignClient.class, dynamicUrl);  // Pass the dynamic URL here
+
+        // Make the POST request
+        return dynamicFeignClient.postToDynamicUrl(userFieldValues);
+  }
+  private List<SystemUserFieldValue> fetchSystemUserFieldValues(List<UserFieldValue> userFieldValues, String system,
+      GatewayUser user) {
+    List<SystemField> systemFields = systemFieldRepository.findSystemFieldsBySystemName(system);
+    List<SystemUserFieldValue> systemUserFieldValueToPersist = new ArrayList<>();
+    systemFields.forEach(systemField -> {
+      systemUserFieldValueToPersist.addAll(userFieldValues.stream()
+          .filter(userFieldValue -> systemField.getName().equalsIgnoreCase(systemField.getName()))
+          .map(t -> new SystemUserFieldValue(random.nextLong(), user,
+          systemFieldRepository.findByFieldNameAndSystem(t.getFieldName(), system), t.getFieldValue()))
+          .collect(Collectors.toList()));
+    });
+    return systemUserFieldValueToPersist;
+  }
+
+  private List<UserFieldValue> fetchUserFieldValueToPersist(List<UserFieldValue> userFieldValues) throws Exception {
+    List<UserField> userFields = columnMetadataService
+        .getDatabaseColumnDetails(SystemConstants.GATEWAY_USER_TABLE_NAME);
+    List<UserFieldValue> userFieldValueToPersist = new ArrayList<>();
+    userFields.forEach(userField -> {
+      userFieldValueToPersist.addAll(userFieldValues.stream()
+          .filter(userFieldValue -> userField.getFieldName().equalsIgnoreCase(userFieldValue.getFieldName()))
+          .collect(Collectors.toList()));
+    });
+    return userFieldValueToPersist;
+  }
+
+  private GatewayUser populateGatewayUser(List<UserFieldValue> userFieldValueTOPersist) {
+    GatewayUser gatewayUser = new GatewayUser();
+    for (java.lang.reflect.Field field : gatewayUser.getClass().getDeclaredFields()) {
+      if (field.isAnnotationPresent(Column.class)) {
+        Column column = field.getAnnotation(Column.class);
+        for (UserFieldValue userFieldValue : userFieldValueTOPersist) {
+          if (userFieldValue.getFieldName().equalsIgnoreCase(column.name())) {
+            SystemConstants.setDynamicField(gatewayUser, field.getName(), userFieldValue.getFieldValue());
+          }
+        }
+      }
+    }
+    gatewayUser.setId(random.nextLong());
+    return gatewayUser;
+  }
+
+}

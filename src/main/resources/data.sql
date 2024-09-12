@@ -1,0 +1,6 @@
+INSERT INTO SYSTEM(id, name, url) VALUES(1, 'system1','https:\\');
+
+INSERT INTO SYSTEM_FIELD VALUES(1, 1, 'birthdate');
+INSERT INTO SYSTEM_FIELD VALUES(2, 1, 'birthplace');
+INSERT INTO SYSTEM_FIELD VALUES(3, 1, 'sex');
+INSERT INTO SYSTEM_FIELD VALUES(4, 1, 'current_address');
