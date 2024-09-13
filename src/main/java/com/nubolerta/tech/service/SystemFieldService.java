@@ -1,5 +1,6 @@
 package com.nubolerta.tech.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -89,7 +90,7 @@ public class SystemFieldService {
     return systemUserFieldValueToPersist;
   }
 
-  private List<UserFieldValue> fetchUserFieldValueToPersist(List<UserFieldValue> userFieldValues) throws Exception {
+  private List<UserFieldValue> fetchUserFieldValueToPersist(List<UserFieldValue> userFieldValues)  throws SQLException{
     List<UserField> userFields = columnMetadataService
         .getDatabaseColumnDetails(SystemConstants.GATEWAY_USER_TABLE_NAME);
     List<UserFieldValue> userFieldValueToPersist = new ArrayList<>();
