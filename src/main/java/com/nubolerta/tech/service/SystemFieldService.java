@@ -84,13 +84,15 @@ public class SystemFieldService {
       GatewayUser user) {
     List<SystemField> systemFields = systemFieldRepository.findSystemFieldsBySystemName(system);
     List<SystemUserFieldValue> systemUserFieldValueToPersist = new ArrayList<>();
-    systemFields.forEach(systemField -> {
-      systemUserFieldValueToPersist.addAll(userFieldValues.stream()
-          .filter(userFieldValue -> systemField.getName().equalsIgnoreCase(systemField.getName()))
-          .map(t -> new SystemUserFieldValue(random.nextLong(), user,
-          systemFieldRepository.findByFieldNameAndSystem(t.getFieldName(), system), t.getFieldValue()))
-          .toList());
-    });
+    for(SystemField systemField : systemFields) {
+      for(UserFieldValue userFieldValue : userFieldValues) {
+        if(systemField.getName().equalsIgnoreCase(userFieldValue.getFieldName())) {
+          SystemField systemFieldFromDB = systemFieldRepository.findByFieldNameAndSystem(systemField.getName(), system);
+          SystemUserFieldValue systemUserFieldValue= new SystemUserFieldValue(random.nextLong(), user, systemFieldFromDB , userFieldValue.getFieldValue());
+          systemUserFieldValueToPersist.add(systemUserFieldValue);
+        }
+      }
+    }
     return systemUserFieldValueToPersist;
   }
 

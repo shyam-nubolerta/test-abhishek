@@ -13,11 +13,6 @@ import jakarta.persistence.Table;
 @Table(name = "GATEWAY_USER_SYSTEM_FIELD_VALUE")
 public class SystemUserFieldValue {
 
-  public SystemUserFieldValue() {
-
-  }
-  
-
   public SystemUserFieldValue(Long id, GatewayUser user, SystemField systemField, String value) {
     this.id = id;
     this.user = user;
@@ -26,7 +21,7 @@ public class SystemUserFieldValue {
   }
   
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   @ManyToOne
