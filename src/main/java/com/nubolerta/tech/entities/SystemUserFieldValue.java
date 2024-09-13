@@ -13,6 +13,10 @@ import jakarta.persistence.Table;
 @Table(name = "GATEWAY_USER_SYSTEM_FIELD_VALUE")
 public class SystemUserFieldValue {
 
+  public SystemUserFieldValue() {
+
+  }
+  
   public SystemUserFieldValue(Long id, GatewayUser user, SystemField systemField, String value) {
     this.id = id;
     this.user = user;
@@ -32,6 +36,6 @@ public class SystemUserFieldValue {
   @JoinColumn(name = "user_system_field_id") 
   private SystemField systemField;
 
-  @Column(name="value")
+  @Column(name="field_value")
   private String value;
 }
