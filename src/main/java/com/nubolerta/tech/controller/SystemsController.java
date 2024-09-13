@@ -7,10 +7,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nubolerta.tech.constants.SystemConstants;
@@ -33,7 +34,7 @@ public class SystemsController {
     this.systemFieldService = systemFieldService;
   }
 
-  @RequestMapping(value = "/form-fields", method = RequestMethod.GET)
+  @GetMapping(value = "/form-fields")
   ResponseEntity<List<UserField>> getFormFields(@PathVariable("system") String system) throws Exception {
     List<UserField> userFields = columnMetadataService.getDatabaseColumnDetails(SystemConstants.GATEWAY_USER_TABLE_NAME);
     List<SystemField> dbFields = systemFieldService.getAllSystemFieldBySystemName(system);
@@ -44,7 +45,7 @@ public class SystemsController {
     return ResponseEntity.ok().body(allFields);
   }
 
-  @RequestMapping(value = "/users", method = RequestMethod.POST)
+  @PostMapping(value = "/users")
   ResponseEntity<Void> saveUserFields(@PathVariable("system") String system, @RequestBody List<UserFieldValue> userFieldValues) throws Exception {
     systemFieldService.saveUserFields(userFieldValues, system);
     return ResponseEntity.status(HttpStatus.CREATED).build();
