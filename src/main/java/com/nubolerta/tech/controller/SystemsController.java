@@ -1,5 +1,6 @@
 package com.nubolerta.tech.controller;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class SystemsController {
   }
 
   @GetMapping(value = "/form-fields")
-  ResponseEntity<List<UserField>> getFormFields(@PathVariable("system") String system) throws Exception {
+  ResponseEntity<List<UserField>> getFormFields(@PathVariable("system") String system) throws SQLException {
     List<UserField> userFields = columnMetadataService.getDatabaseColumnDetails(SystemConstants.GATEWAY_USER_TABLE_NAME);
     List<SystemField> dbFields = systemFieldService.getAllSystemFieldBySystemName(system);
     List<UserField> dbUserFields = dbFields.stream().map(field -> new UserField(field.getName(), SystemConstants.TEXT)).toList();
