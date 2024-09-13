@@ -46,7 +46,7 @@ public class SystemsController {
   }
 
   @PostMapping(value = "/users")
-  ResponseEntity<Void> saveUserFields(@PathVariable("system") String system, @RequestBody List<UserFieldValue> userFieldValues) throws Exception {
+  ResponseEntity<Void> saveUserFields(@PathVariable("system") String system, @RequestBody List<UserFieldValue> userFieldValues) throws SQLException {
     systemFieldService.saveUserFields(userFieldValues, system);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }

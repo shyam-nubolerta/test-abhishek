@@ -63,10 +63,10 @@ public class SystemFieldService {
     gatewayUserRepository.save(gatewayUser);
     List<SystemUserFieldValue> systemUserFieldValues = fetchSystemUserFieldValues(userFieldValues, system, gatewayUser);
     systemUserFieldValueRepository.saveAll(systemUserFieldValues);
-    makePostRequest(userFieldValues, system);
+    makePostRequest(system);
   }
 
-  public Object makePostRequest(List<UserFieldValue> userFieldValues, String system) {
+  public Object makePostRequest(String system) {
         // Fetch the dynamic URL from the database
         com.nubolerta.tech.entities.System systemDB = systemRepository.findByName(system);
 
@@ -76,7 +76,7 @@ public class SystemFieldService {
         DynamicFeignClient dynamicFeignClient = Feign.builder()
                 .target(DynamicFeignClient.class, dynamicUrl);  // Pass the dynamic URL here
 
-        logger.info("Execution external service URL" + dynamicUrl + "userFieldValues to be submitted to post method" + userFieldValues);                
+        logger.info("Execution external service URL" + dynamicUrl);                
         // Make the POST request dynamicFeignClient.postToDynamicUrl(userFieldValues)
         return null;
   }
