@@ -3,7 +3,6 @@ package com.nubolerta.tech.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,7 +84,7 @@ public class SystemFieldService {
           .filter(userFieldValue -> systemField.getName().equalsIgnoreCase(systemField.getName()))
           .map(t -> new SystemUserFieldValue(random.nextLong(), user,
           systemFieldRepository.findByFieldNameAndSystem(t.getFieldName(), system), t.getFieldValue()))
-          .collect(Collectors.toList()));
+          .toList());
     });
     return systemUserFieldValueToPersist;
   }
@@ -97,7 +96,7 @@ public class SystemFieldService {
     userFields.forEach(userField -> {
       userFieldValueToPersist.addAll(userFieldValues.stream()
           .filter(userFieldValue -> userField.getFieldName().equalsIgnoreCase(userFieldValue.getFieldName()))
-          .collect(Collectors.toList()));
+          .toList());
     });
     return userFieldValueToPersist;
   }
