@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class SystemFieldService {
+
+  private static final Logger logger = LoggerFactory.getLogger(SystemFieldService.class);
 
   private SystemFieldRepository systemFieldRepository;
   
@@ -72,7 +76,7 @@ public class SystemFieldService {
         DynamicFeignClient dynamicFeignClient = Feign.builder()
                 .target(DynamicFeignClient.class, dynamicUrl);  // Pass the dynamic URL here
 
-        System.out.print("Execution external service URL" + dynamicUrl + "userFieldValues to be submitted to post method" + userFieldValues);                
+        logger.info("Execution external service URL" + dynamicUrl + "userFieldValues to be submitted to post method" + userFieldValues);                
         // Make the POST request dynamicFeignClient.postToDynamicUrl(userFieldValues)
         return null;
   }
