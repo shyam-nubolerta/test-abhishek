@@ -23,7 +23,7 @@ public class UsersController {
   }
 
   @GetMapping(value = "")
-  ResponseEntity<List<GatewayUser>> getUsers() throws Exception {
+  ResponseEntity<List<GatewayUser>> getUsers() {
     return ResponseEntity.ok().body(gatewayUserService.getAll());
   }
 }

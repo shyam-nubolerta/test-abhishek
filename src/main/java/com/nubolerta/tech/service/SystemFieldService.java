@@ -71,7 +71,7 @@ public class SystemFieldService {
         DynamicFeignClient dynamicFeignClient = Feign.builder()
                 .target(DynamicFeignClient.class, dynamicUrl);  // Pass the dynamic URL here
 
-        System.out.print("Execution external service URL" + dynamicUrl);                
+        System.out.print("Execution external service URL" + dynamicUrl + "userFieldValues to be submitted to post method" + userFieldValues);                
         // Make the POST request dynamicFeignClient.postToDynamicUrl(userFieldValues)
         return null;
   }
