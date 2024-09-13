@@ -24,7 +24,7 @@ public class SystemField {
     @ManyToOne
     @JoinColumn(name = "system_id") 
     private com.nubolerta.tech.entities.System system;
-
+    
     public Long getId() {
         return id;
     }
