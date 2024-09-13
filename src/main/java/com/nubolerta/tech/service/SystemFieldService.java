@@ -75,8 +75,10 @@ public class SystemFieldService {
         // Build a Feign client with the dynamic URL
         DynamicFeignClient dynamicFeignClient = Feign.builder()
                 .target(DynamicFeignClient.class, dynamicUrl);  // Pass the dynamic URL here
-
-        logger.info("Execution external service URL" + dynamicUrl);                
+        StringBuilder logBuiler = new StringBuilder();
+        logBuiler.append("Execution external service URL :")
+        .append(dynamicUrl);
+        logger.info(logBuiler.toString());                
         // Make the POST request dynamicFeignClient.postToDynamicUrl(userFieldValues)
         return null;
   }
