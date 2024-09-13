@@ -53,7 +53,7 @@ public class SystemFieldService {
   }
 
   @Transactional
-  public void saveUserFields(List<UserFieldValue> userFieldValues, String system) throws Exception {
+  public void saveUserFields(List<UserFieldValue> userFieldValues, String system) throws SQLException {
     List<UserFieldValue> userFieldValueToPersist = fetchUserFieldValueToPersist(userFieldValues);
     GatewayUser gatewayUser = populateGatewayUser(userFieldValueToPersist);
     gatewayUserRepository.save(gatewayUser);
