@@ -27,22 +27,26 @@ import jakarta.transaction.Transactional;
 @Service
 public class SystemFieldService {
 
-  @Autowired
   private SystemFieldRepository systemFieldRepository;
   
-  @Autowired
   private SystemRepository systemRepository;
 
-  @Autowired
   private ColumnMetadataService columnMetadataService;
 
-  @Autowired
   private GatewayUserRepository gatewayUserRepository;
 
-  @Autowired
   private SystemUserFieldValueRepository systemUserFieldValueRepository;
 
   Random random = new Random();
+
+  @Autowired
+  public SystemFieldService(SystemFieldRepository systemFieldRepository, SystemRepository systemRepository, ColumnMetadataService columnMetadataService, GatewayUserRepository gatewayUserRepository, SystemUserFieldValueRepository systemUserFieldValueRepository) {
+    this.systemFieldRepository = systemFieldRepository;
+    this.systemRepository = systemRepository;
+    this.columnMetadataService = columnMetadataService;
+    this.gatewayUserRepository = gatewayUserRepository;
+    this.systemUserFieldValueRepository = systemUserFieldValueRepository;
+  }
 
   public List<SystemField> getAllSystemFieldBySystemName(String systemName) {
     return systemFieldRepository.findSystemFieldsBySystemName(systemName);

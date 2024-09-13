@@ -32,8 +32,10 @@ For example# http://localhost:8080/api-gateway/api/systems/system1/users
 "fieldName" : "sex",
 "fieldValue" : "male"
 }
-] 3) GET http://localhost:8080/api-gateway/api/users
-API to check data in GW_USER table
+]
+
+3. GET http://localhost:8080/api-gateway/api/users
+   API to check data in GW_USER table
 
 DB used#
 Used in memory db H2.

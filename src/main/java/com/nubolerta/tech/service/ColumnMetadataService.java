@@ -16,8 +16,12 @@ import com.nubolerta.tech.dto.UserField;
 @Service
 public class ColumnMetadataService {
 
-    @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    public ColumnMetadataService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public List<UserField> getDatabaseColumnDetails(String tableName) throws Exception {
         List<UserField> userFields = new ArrayList<>();

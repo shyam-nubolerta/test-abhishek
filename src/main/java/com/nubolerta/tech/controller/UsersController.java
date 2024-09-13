@@ -14,8 +14,13 @@ import com.nubolerta.tech.service.GatewayUserService;
 @RestController
 @RequestMapping("/api/users")
 public class UsersController {
-  @Autowired
+  
   private GatewayUserService gatewayUserService;
+
+  @Autowired
+  public UsersController(GatewayUserService gatewayUserService) {
+    this.gatewayUserService = gatewayUserService;
+  }
 
   @RequestMapping(value = "", method = RequestMethod.GET)
   ResponseEntity<List<GatewayUser>> getUsers() throws Exception {

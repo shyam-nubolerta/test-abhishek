@@ -23,10 +23,15 @@ import com.nubolerta.tech.service.SystemFieldService;
 @RestController
 @RequestMapping("/api/systems/{system}")
 public class SystemsController {
-  @Autowired
+
   private ColumnMetadataService columnMetadataService;
-  @Autowired
   private SystemFieldService systemFieldService;
+
+  @Autowired
+  public SystemsController(ColumnMetadataService columnMetadataService, SystemFieldService systemFieldService) {
+    this.columnMetadataService = columnMetadataService;
+    this.systemFieldService = systemFieldService;
+  }
 
   @RequestMapping(value = "/form-fields", method = RequestMethod.GET)
   ResponseEntity<List<UserField>> getFormFields(@PathVariable("system") String system) throws Exception {

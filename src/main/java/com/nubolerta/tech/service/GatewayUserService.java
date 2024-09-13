@@ -10,9 +10,13 @@ import com.nubolerta.tech.repository.GatewayUserRepository;
 
 @Service
 public class GatewayUserService {
-  
-@Autowired
+
 private GatewayUserRepository gatewayUserRepository;
+
+@Autowired
+public GatewayUserService(GatewayUserRepository gatewayUserRepository) {
+  this.gatewayUserRepository = gatewayUserRepository;
+}
 
 public List<GatewayUser> getAll() {
   return gatewayUserRepository.findAll();
