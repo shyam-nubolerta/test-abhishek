@@ -78,7 +78,7 @@ public class SystemFieldService {
         StringBuilder logBuiler = new StringBuilder();
         logBuiler.append("Execution external service URL :")
         .append(dynamicUrl);
-        logger.info(logBuiler.toString());                
+        logger.info("{}",logBuiler);                
         // Make the POST request dynamicFeignClient.postToDynamicUrl(userFieldValues)
         return null;
   }
