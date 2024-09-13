@@ -58,8 +58,7 @@ public class SystemFieldService {
     gatewayUserRepository.save(gatewayUser);
     List<SystemUserFieldValue> systemUserFieldValues = fetchSystemUserFieldValues(userFieldValues, system, gatewayUser);
     systemUserFieldValueRepository.saveAll(systemUserFieldValues);
-    // Make External service call by fetching url from DB, uncomment when real service url is available.
-    //makePostRequest(userFieldValues, system);
+    makePostRequest(userFieldValues, system);
   }
 
   public Object makePostRequest(List<UserFieldValue> userFieldValues, String system) {
@@ -72,8 +71,9 @@ public class SystemFieldService {
         DynamicFeignClient dynamicFeignClient = Feign.builder()
                 .target(DynamicFeignClient.class, dynamicUrl);  // Pass the dynamic URL here
 
-        // Make the POST request
-        return dynamicFeignClient.postToDynamicUrl(userFieldValues);
+        System.out.print("Execution external service URL" + dynamicUrl);                
+        // Make the POST request dynamicFeignClient.postToDynamicUrl(userFieldValues)
+        return null;
   }
   private List<SystemUserFieldValue> fetchSystemUserFieldValues(List<UserFieldValue> userFieldValues, String system,
       GatewayUser user) {
