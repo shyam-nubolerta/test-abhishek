@@ -25,8 +25,6 @@ public class SystemField {
     @JoinColumn(name = "system_id") 
     private com.nubolerta.tech.entities.System system;
 
-    public SystemField() {}
-
     public Long getId() {
         return id;
     }
