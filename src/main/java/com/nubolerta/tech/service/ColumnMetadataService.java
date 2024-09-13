@@ -2,6 +2,7 @@ package com.nubolerta.tech.service;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class ColumnMetadataService {
         this.dataSource = dataSource;
     }
 
-    public List<UserField> getDatabaseColumnDetails(String tableName) throws Exception {
+    public List<UserField> getDatabaseColumnDetails(String tableName) throws SQLException{
         List<UserField> userFields = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
