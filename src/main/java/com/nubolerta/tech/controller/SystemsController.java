@@ -2,7 +2,6 @@ package com.nubolerta.tech.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +37,7 @@ public class SystemsController {
   ResponseEntity<List<UserField>> getFormFields(@PathVariable("system") String system) throws Exception {
     List<UserField> userFields = columnMetadataService.getDatabaseColumnDetails(SystemConstants.GATEWAY_USER_TABLE_NAME);
     List<SystemField> dbFields = systemFieldService.getAllSystemFieldBySystemName(system);
-    List<UserField> dbUserFields = dbFields.stream().map(field -> new UserField(field.getName(), SystemConstants.TEXT)).collect(Collectors.toList());
+    List<UserField> dbUserFields = dbFields.stream().map(field -> new UserField(field.getName(), SystemConstants.TEXT)).toList();
     List<UserField> allFields = new ArrayList<>();
     allFields.addAll(userFields);
     allFields.addAll(dbUserFields);
