@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,7 +17,7 @@ public class SystemUserFieldValue {
   public SystemUserFieldValue() {
 
   }
-  
+
   public SystemUserFieldValue(Long id, GatewayUser user, SystemField systemField, String value) {
     this.id = id;
     this.user = user;
@@ -25,7 +26,8 @@ public class SystemUserFieldValue {
   }
   
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GATEWAY_USER_SYSTEM_FIELD_VALUE_SEQ")
+  @SequenceGenerator(name = "GATEWAY_USER_SYSTEM_FIELD_VALUE_SEQ", sequenceName = "GATEWAY_USER_SYSTEM_FIELD_VALUE_SEQ", allocationSize = 1)
   private Long id;
 
   @ManyToOne

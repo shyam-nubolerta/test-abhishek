@@ -3,7 +3,6 @@ package com.nubolerta.tech.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +15,11 @@ import com.nubolerta.tech.dto.UserFieldValue;
 import com.nubolerta.tech.entities.GatewayUser;
 import com.nubolerta.tech.entities.SystemField;
 import com.nubolerta.tech.entities.SystemUserFieldValue;
-import com.nubolerta.tech.external.DynamicFeignClient;
 import com.nubolerta.tech.repository.GatewayUserRepository;
 import com.nubolerta.tech.repository.SystemFieldRepository;
 import com.nubolerta.tech.repository.SystemRepository;
 import com.nubolerta.tech.repository.SystemUserFieldValueRepository;
 
-import feign.Feign;
 import jakarta.persistence.Column;
 import jakarta.transaction.Transactional;
 
@@ -40,8 +37,6 @@ public class SystemFieldService {
   private GatewayUserRepository gatewayUserRepository;
 
   private SystemUserFieldValueRepository systemUserFieldValueRepository;
-
-  Random random = new Random();
 
   @Autowired
   public SystemFieldService(SystemFieldRepository systemFieldRepository, SystemRepository systemRepository, ColumnMetadataService columnMetadataService, GatewayUserRepository gatewayUserRepository, SystemUserFieldValueRepository systemUserFieldValueRepository) {
@@ -73,8 +68,6 @@ public class SystemFieldService {
         String dynamicUrl = systemDB.getUrl();
 
         // Build a Feign client with the dynamic URL
-        DynamicFeignClient dynamicFeignClient = Feign.builder()
-                .target(DynamicFeignClient.class, dynamicUrl);  // Pass the dynamic URL here
         StringBuilder logBuiler = new StringBuilder();
         logBuiler.append("Execution external service URL :")
         .append(dynamicUrl);
@@ -90,7 +83,7 @@ public class SystemFieldService {
       for(UserFieldValue userFieldValue : userFieldValues) {
         if(systemField.getName().equalsIgnoreCase(userFieldValue.getFieldName())) {
           SystemField systemFieldFromDB = systemFieldRepository.findByFieldNameAndSystem(systemField.getName(), system);
-          SystemUserFieldValue systemUserFieldValue= new SystemUserFieldValue(random.nextLong(), user, systemFieldFromDB , userFieldValue.getFieldValue());
+          SystemUserFieldValue systemUserFieldValue= new SystemUserFieldValue(null , user, systemFieldFromDB , userFieldValue.getFieldValue());
           systemUserFieldValueToPersist.add(systemUserFieldValue);
         }
       }
@@ -122,7 +115,6 @@ public class SystemFieldService {
         }
       }
     }
-    gatewayUser.setId(random.nextLong());
     return gatewayUser;
   }
 

@@ -38,6 +38,6 @@ For example# http://localhost:8080/api-gateway/api/systems/system1/users
    API to check data in GW_USER table
 
 DB used#
-Used in memory db H2.
+Used in memory db H2. http://localhost:8080/api-gateway//h2-console
 DDL # #src/main/resources/schema.sql
 DML # #src/main/resources/data.sql

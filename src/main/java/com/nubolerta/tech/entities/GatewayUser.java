@@ -5,13 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "GATEWAY_USER")
 public class GatewayUser {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GATEWAY_USER_SEQ")
+    @SequenceGenerator(name = "GATEWAY_USER_SEQ", sequenceName = "GATEWAY_USER_SEQ", allocationSize = 1)
     private Long id;
     
     @Column(name="first_name")

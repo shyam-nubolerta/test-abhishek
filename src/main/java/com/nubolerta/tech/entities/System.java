@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,7 +17,8 @@ import jakarta.persistence.Table;
 public class System {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYSTEM_SEQ")
+    @SequenceGenerator(name = "SYSTEM_SEQ", sequenceName = "SYSTEM_SEQ", allocationSize = 1)
     private Long id;
 
     private String name;
